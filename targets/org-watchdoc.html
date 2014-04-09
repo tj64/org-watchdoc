@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Org-watchdoc</title>
-<!-- 2014-04-10 Do 00:58 -->
+<!-- 2014-04-10 Do 01:36 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Thorsten Jolitz" />
@@ -155,7 +155,8 @@ for the JavaScript code in this tag.
 <li><a href="#sec-1-4-1">1.4.1. Commands</a></li>
 <li><a href="#sec-1-4-2">1.4.2. Interactive Use</a></li>
 <li><a href="#sec-1-4-3">1.4.3. Use with Outorg</a></li>
-<li><a href="#sec-1-4-4">1.4.4. ChangeLog</a></li>
+<li><a href="#sec-1-4-4">1.4.4. Keybindings in Outshine</a></li>
+<li><a href="#sec-1-4-5">1.4.5. ChangeLog</a></li>
 </ul>
 </li>
 </ul>
@@ -311,8 +312,10 @@ In interactive use, this would be the typical order of actions:
 </p>
 
 <ol class="org-ol">
-<li>Export first buffer tree to desired doc files
-(e.g. README-GH.md or README-WORG.html)
+<li>Export first buffer tree to desired doc files (e.g. README-GH.md
+or README-WORG.html). Optional, since adding non-exiting
+target-files in step 2 will cause the exporter to write them the
+when exiting the edit-buffer.
 </li>
 
 <li>Add targets with point on first buffer headline.
@@ -322,8 +325,6 @@ Targets are combinations of files the exporter writes to,
 export-template files to be inserted before the exporter does
 its work, and backends the exporter should export to, e.g.
 </p>
-</li>
-</ol>
 
 <pre class="example">
 "/home/me/proj/README-GH.md /home/me/proj/gh-tmpl.org gfm"
@@ -334,8 +335,8 @@ its work, and backends the exporter should export to, e.g.
 The three elements of such a combination are prompted from
 the user.
 </p>
+</li>
 
-<ol class="org-ol">
 <li>Save and set md5 variable.
 </li>
 
@@ -368,6 +369,10 @@ for direct interactive use.
 </p>
 </li>
 </ul>
+
+<pre class="example">
+M-x outorg-edit-comments-and-propagate-changes
+</pre>
 
 <p>
 Then whenever you want to edit the source-buffer's
@@ -407,8 +412,37 @@ watchlist.
 </div>
 </div>
 <div id="outline-container-sec-1-4-4" class="outline-4">
-<h4 id="sec-1-4-4"><span class="section-number-4">1.4.4</span> ChangeLog</h4>
+<h4 id="sec-1-4-4"><span class="section-number-4">1.4.4</span> Keybindings in Outshine</h4>
 <div class="outline-text-4" id="text-1-4-4">
+<p>
+Here are the keybindings I added to outshine.el:
+</p>
+
+<pre class="example">
+;; edit comment-section with `outorg' and propagate changes
+
+;; best used with prefix-key 'C-c' 
+(define-key map "`" 'outorg-edit-comments-and-propagate-changes)
+
+;; best used with prefix-key 'M-#'
+(define-key map "\M-+" 'outorg-edit-comments-and-propagate-changes)
+(define-key map "+" 'outorg-edit-comments-and-propagate-changes)
+</pre>
+
+<p>
+So just like editing e.g. an Emacs Lisp buffer or subtree (with
+outshine activated) in full Org-mode only involves pressing M-# M-#
+once to start editing, and then M-# to exit the edit-buffer, edting
+the comment-section of such a source-buffer and propagating the
+changes to several export-targets only involves pressing M-# M-+ once
+to start editing, and then M-# to exit the edit buffer (when M-# was
+set as outline-minor-mode prefix). 
+</p>
+</div>
+</div>
+<div id="outline-container-sec-1-4-5" class="outline-4">
+<h4 id="sec-1-4-5"><span class="section-number-4">1.4.5</span> ChangeLog</h4>
+<div class="outline-text-4" id="text-1-4-5">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -443,7 +477,7 @@ watchlist.
 <p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2014-04-09 Mi&gt;</span></span></p>
 <p class="author">Author: Thorsten Jolitz</p>
 <p class="email">Email: <a href="mailto:tjolitz at gmail dot com">tjolitz at gmail dot com</a></p>
-<p class="date">Created: 2014-04-10 Do 00:58</p>
+<p class="date">Created: 2014-04-10 Do 01:36</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.2.5h)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>

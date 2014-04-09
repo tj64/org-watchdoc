@@ -80,8 +80,10 @@
 
 ;; In interactive use, this would be the typical order of actions:
 
-;;  1. Export first buffer tree to desired doc files
-;;     (e.g. README-GH.md or README-WORG.html)
+;;  1. Export first buffer tree to desired doc files (e.g. README-GH.md
+;;     or README-WORG.html). Optional, since adding non-exiting
+;;     target-files in step 2 will cause the exporter to write them the
+;;     when exiting the edit-buffer.
 
 ;;  2. Add targets with point on first buffer headline.
     
@@ -115,6 +117,10 @@
 ;;    In the *outorg-edit-buffer* do steps 1 and 2 described above
 ;;    for direct interactive use.
 
+;; #+begin_example
+;;  M-x outorg-edit-comments-and-propagate-changes
+;; #+end_example
+
 ;; Then whenever you want to edit the source-buffer's
 ;; comment-section and propagate the changes to the watched doc
 ;; files, do:
@@ -139,6 +145,29 @@
 ;;  - Check if buffer md5 has changed when editing is quitted. If so,
 ;;    propagate the changes to the doc files registered in the subtrees
 ;;    watchlist.
+
+;;;;; Keybindings in Outshine
+
+;; Here are the keybindings I added to outshine.el:
+
+;; #+begin_example
+;;   ;; edit comment-section with `outorg' and propagate changes
+
+;;   ;; best used with prefix-key 'C-c' 
+;;   (define-key map "`" 'outorg-edit-comments-and-propagate-changes)
+
+;;   ;; best used with prefix-key 'M-#'
+;;   (define-key map "\M-+" 'outorg-edit-comments-and-propagate-changes)
+;;   (define-key map "+" 'outorg-edit-comments-and-propagate-changes)
+;; #+end_example
+
+;; So just like editing e.g. an Emacs Lisp buffer or subtree (with
+;; outshine activated) in full Org-mode only involves pressing M-# M-#
+;; once to start editing, and then M-# to exit the edit-buffer, edting
+;; the comment-section of such a source-buffer and propagating the
+;; changes to several export-targets only involves pressing M-# M-+ once
+;; to start editing, and then M-# to exit the edit buffer (when M-# was
+;; set as outline-minor-mode prefix). 
 
 ;;;;; ChangeLog
 
