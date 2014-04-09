@@ -1,4 +1,9 @@
 ;;; org-watchdoc.el --- Watchdog for exported Org-mode trees
+;;   :PROPERTIES:
+;;   :EXPORT_OPTIONS: prop:nil
+;;   :wdoc_1992rwM: /home/tj/git/org-watchdoc/README.md /home/tj/git/org-watchdoc/export-templates/org-watchdoc-gh.org gfm
+;;   :wdoc_1992G_r: /home/tj/gitclone/worg/org-contrib/org-watchdoc.org /home/tj/git/org-watchdoc/export-templates/org-watchdoc-worg.org org
+;;   :END:
 
 ;; Copyright (C) from 2014 Thorsten Jolitz
 ;; Author: Thorsten Jolitz <tjolitz at gmail dot com>
@@ -61,7 +66,6 @@
 ;; Since org-watchdoc is a toolbox and not a mode, no menu or keymap
 ;; is specified. However, its commands can be used interactively:
 
-
 ;; | M-x org-watchdoc- | action                                   |
 ;; |-------------------+------------------------------------------|
 ;; | add-target        | add target-combination to watchlist      |
@@ -81,13 +85,14 @@
 ;;     Targets are combinations of files the exporter writes to,
 ;;     export-template files to be inserted before the exporter does
 ;;     its work, and backends the exporter should export to, e.g.
-    
-;;     "/home/me/proj/README-GH.md /home/me/proj/gh-tmpl.org gfm"
-;;     "/home/me/proj/README-WORG.html /home/me/proj/worg-tmpl.org
-;;     html"
 
-;;     The three elements of such a combination are prompted from the
-;;     user.
+;; #+begin_example
+;;       "/home/me/proj/README-GH.md /home/me/proj/gh-tmpl.org gfm"
+;;       "/home/me/proj/README-WORG.html /home/me/proj/worg-tmpl.org html"
+;; #+end_example
+    
+;;     The three elements of such a combination are prompted from
+;;     the user.
 
 ;;  3. Save and set md5 variable.
 
@@ -109,25 +114,28 @@
 
 ;; Then whenever you want to edit the source-buffer's
 ;; comment-section and propagate the changes to the watched doc
-;; files, do
+;; files, do:
 
-;; ,---------------------------------------
-;; | M-x outorg-edit-comments-and-propagate-changes
-;; `---------------------------------------
+;; #+begin_example
+;;  M-x outorg-edit-comments-and-propagate-changes
+;; #+end_example
 
 ;; instead of the usual 
 
-;; ,-------------------------------
-;; | M-x outorg-edit-comment-as-org
-3;; `-------------------------------
+;; #+begin_example
+;;  M-x outorg-edit-comment-as-org
+;; #+end_example
 
 ;; This will
 
 ;;  - Offer the first buffer tree for editing in the
-;;  - *outorg-edit-buffer* Reset `org-watchdoc-md5' immediately
-;;  - after edit-buffer setup Check if buffer md5 has changed when
-;;  - editing is quitted. If so, ;; propagate the changes to the doc
-;;  - files registered in the subtrees ;; watchlist.
+;;    *outorg-edit-buffer* 
+
+;;  - Reset `org-watchdoc-md5' immediately after edit-buffer setup 
+
+;;  - Check if buffer md5 has changed when editing is quitted. If so,
+;;    propagate the changes to the doc files registered in the subtrees
+;;    watchlist.
 
 ;;;;; ChangeLog
 
@@ -154,16 +162,18 @@
   (unless (string= (md5 (current-buffer)) org-watchdoc-md5)
     (mapc
      (lambda (--prop)
-       (when (string-match "^wdoc_[[:word:]]+$" (car --prop))
+       (when (string-match "^wdoc_.+$" (car --prop))
 	 (let ((buf (current-buffer))
 	       (wdoc-lst (split-string (cdr --prop) " " t)))
-	       (with-temp-buffer
-		   (insert-file-contents (nth 1 wdoc-lst))
-		   (goto-char (point-max))
-		   (insert-buffer-substring buf)
-		   (org-export-to-file
-		       (intern (car (last wdoc-lst)))
-		       (car wdoc-lst))))))
+	   (with-temp-buffer
+	     (insert-file-contents (nth 1 wdoc-lst))
+	     (goto-char (point-max))
+	     (insert-buffer-substring buf)
+	     (let ((backend-as-strg (car (last wdoc-lst))))
+	       (require
+		(intern (concat "ox-" backend-as-strg)) nil t)
+	       (org-export-to-file
+		   (intern backend-as-strg) (car wdoc-lst)))))))
      (org-entry-properties))))
 
 
@@ -176,54 +186,45 @@ EXPORT-BACKEND determines the backend used by `org-export-as' to
    (list
     (read-file-name "Target File: ")
     (read-file-name "Export Template File: ")
-    (ido-completing-read "Backend: "
+    (ido-completing-read "Backend (select or type): "
 			 (mapcar 'symbol-name
 				 org-export-backends))))
   (save-excursion
     (save-restriction
       (widen)
-      (outline-previous-heading)
+      (goto-char (point-min))
+      (unless (outline-on-heading-p 'INVISIBLE-OK)
+	(ignore-errors
+	  (outline-next-heading)))
       (org-entry-put-multivalued-property
        (point) (make-temp-name "wdoc_")
-       target-file export-template-file export-backend)
+      (expand-file-name target-file)
+      (expand-file-name export-template-file)
+      export-backend)
       (unless (org-entry-get (point) "EXPORT_OPTIONS")
       (org-entry-put-multivalued-property
        (point) "EXPORT_OPTIONS" "prop:nil")))))
 
 
-(defun org-watchdoc-remove-target (target-file export-template-file export-backend)
-  "Remove TARGET-FILE from watch list of current subtree.
-EXPORT-BACKEND determines the backend used by `org-export-as' to
- update the doc file. Optional EXPORT-TEMPLATE-FILE is inserted
- when non-nil."
-  (interactive
-   (list
-    (read-file-name "Target File: ")
-    (read-file-name "Export Template File: ")
-    (ido-completing-read "Backend: "
-			 (mapcar 'symbol-name
-				 org-export-backends))))
+(defun org-watchdoc-remove-target (target-file)
+  "Remove TARGET-FILE from watch list of root-tree."
+  (interactive "fTarget File: ")
   (save-excursion
     (save-restriction
       (widen)
-      (outline-previous-heading)
+      (goto-char (point-min))
+      (unless (outline-on-heading-p 'INVISIBLE-OK)
+	(ignore-errors
+	  (outline-next-heading)))
       (let ((prop
 	     (delq nil
-	      (mapcar
-	       (lambda (--prop)
-		 (when
-		     (and
-		      (org-entry-member-in-multivalued-property
-			(point) (car-safe --prop)
-			target-file)
-		      (org-entry-member-in-multivalued-property
-			(point) (car-safe --prop)
-			export-template-file)
-		      (org-entry-member-in-multivalued-property
-			(point) (car-safe --prop)
-			export-backend)))
-		   (car-safe --prop)))
-		 (org-entry-properties))))
+		   (mapcar
+		    (lambda (--prop)
+		      (when
+			  (org-entry-member-in-multivalued-property
+			   (point) (car-safe --prop) target-file)
+			(car-safe --prop)))
+		    (org-entry-properties)))))
 	(when (consp prop)
 	  (org-entry-delete (point) (car prop)))))))
 
