@@ -4,23 +4,19 @@
 ;; Author: Thorsten Jolitz <tjolitz at gmail dot com>
 ;; Keywords: org-mode, exporter, propagate changes, documentation
 
-;;;; License
-
-;; This library is distributed under GPLv3 or later license. It is not
-;; (yet) part of GNU Emacs.
-
-;; GNU Emacs is free software: you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published
-;; by the Free Software Foundation, either version 3 of the License,
-;; or (at your option) any later version.
-
-;; GNU Emacs is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
-
-;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>
+;;;; MetaData
+;;   :PROPERTIES:
+;;   :copyright: Thorsten Jolitz
+;;   :copyright-years: 2014+
+;;   :version:  1.0
+;;   :licence:  GPL 3 or later (free software)
+;;   :licence-url: http://www.gnu.org/licenses/
+;;   :part-of-emacs: no
+;;   :git-repo: https://github.com/tj64/org-watchdoc.git
+;;   :git-clone: git://github.com/tj64/org-watchdoc.git
+;;   :author: Thorsten Jolitz
+;;   :author_email: tjolitz AT gmail DOT com
+;;   :END:
 
 ;;;; Commentary
 
