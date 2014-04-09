@@ -171,7 +171,7 @@
      (org-entry-properties))))
 
 
-(defun org-watchdoc-add-target (target-file &optional export-backend export-template-file)
+(defun org-watchdoc-add-target (target-file &optional export-template-file export-backend)
   "Add TARGET-FILE to watch list of current subtree.
 EXPORT-BACKEND determines the backend used by `org-export-as' to
  update the doc file. Optional EXPORT-TEMPLATE-FILE is inserted
@@ -179,21 +179,23 @@ EXPORT-BACKEND determines the backend used by `org-export-as' to
   (interactive
    (list
     (read-file-name "Target File: ")
+    (read-file-name "Export Template File: ")
     (ido-completing-read "Backend: "
 			 (mapcar 'symbol-name
-				 org-export-backends))
-    (read-file-name "Export Template File: ")))
+				 org-export-backends))))
   (save-excursion
     (save-restriction
       (widen)
       (outline-previous-heading)
       (org-entry-put-multivalued-property
        (point) (make-temp-name "wdoc_")
-       target-file export-template-file export-backend))))
-    ;; (org-watchdoc-set-md5))
+       target-file export-template-file export-backend)
+      (unless (org-entry-get (point) "EXPORT_OPTIONS")
+      (org-entry-put-multivalued-property
+       (point) "EXPORT_OPTIONS" "prop:nil")))))
 
 
-(defun org-watchdoc-remove-target (target-file export-backend export-template-file)
+(defun org-watchdoc-remove-target (target-file export-template-file export-backend)
   "Remove TARGET-FILE from watch list of current subtree.
 EXPORT-BACKEND determines the backend used by `org-export-as' to
  update the doc file. Optional EXPORT-TEMPLATE-FILE is inserted
@@ -201,26 +203,33 @@ EXPORT-BACKEND determines the backend used by `org-export-as' to
   (interactive
    (list
     (read-file-name "Target File: ")
+    (read-file-name "Export Template File: ")
     (ido-completing-read "Backend: "
 			 (mapcar 'symbol-name
-				 org-export-backends))
-    (read-file-name "Export Template File: ")))
+				 org-export-backends))))
   (save-excursion
     (save-restriction
       (widen)
       (outline-previous-heading)
       (let ((prop
-	     ;; (car-safe
 	     (delq nil
 	      (mapcar
 	       (lambda (--prop)
-		 (when (org-entry-member-in-multivalued-property
-			(point) (car-safe --prop) target-file)
+		 (when
+		     (and
+		      (org-entry-member-in-multivalued-property
+			(point) (car-safe --prop)
+			target-file)
+		      (org-entry-member-in-multivalued-property
+			(point) (car-safe --prop)
+			export-template-file)
+		      (org-entry-member-in-multivalued-property
+			(point) (car-safe --prop)
+			export-backend)))
 		   (car-safe --prop)))
-		 (org-entry-properties)))))
+		 (org-entry-properties))))
 	(when (consp prop)
 	  (org-entry-delete (point) (car prop)))))))
-  ;; (org-watchdoc-set-md5))
 
 (defun org-watchdoc-set-md5 ()
   "Set buffer-local variable `org-watchdoc-md5'."
