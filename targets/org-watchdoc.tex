@@ -1,0 +1,200 @@
+% Created 2014-04-10 Do 00:58
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\tolerance=1000
+\author{Thorsten Jolitz\thanks{tjolitz at gmail dot com}}
+\date{\textit{<2014-04-09 Mi>}}
+\title{Org-watchdoc}
+\hypersetup{
+ pdfkeywords={org-mode, outshine, outorg, exporter, synchronization},
+  pdfsubject={Watchdog for exported Org-mode trees},
+  pdfcreator={Emacs 24.3.1 (Org mode 8.2.5h)}}
+\begin{document}
+
+\maketitle
+\setcounter{tocdepth}{3}
+\tableofcontents
+
+
+\section{org-watchdoc.el --- Watchdog for exported Org-mode trees}
+\label{sec-1}
+\begin{verbatim}
+EXPORT_OPTIONS: prop:nil
+wdoc_1992rwM: /home/tj/git/org-watchdoc/README.md /home/tj/git/org-watchdoc/export-templates/org-watchdoc-gh.org gfm
+wdoc_1992G_r: /home/tj/gitclone/worg/org-contrib/org-watchdoc.org /home/tj/git/org-watchdoc/export-templates/org-watchdoc-worg.org org
+wdoc_1992gas: /home/tj/git/org-watchdoc/targets/org-watchdoc.html /home/tj/git/org-watchdoc/export-templates/org-watchdoc-gh.org html
+wdoc_1992tky: /home/tj/git/org-watchdoc/targets/org-watchdoc.txt /home/tj/git/org-watchdoc/export-templates/org-watchdoc-gh.org ascii
+wdoc_1992fuB: /home/tj/git/org-watchdoc/targets/org-watchdoc.tex /home/tj/git/org-watchdoc/export-templates/org-watchdoc-gh.org latex
+\end{verbatim}
+
+Copyright (C) from 2014 Thorsten Jolitz
+Author: Thorsten Jolitz <tjolitz at gmail dot com>
+Keywords: org-mode, exporter, propagate changes, documentation
+
+\subsection{MetaData}
+\label{sec-1-1}
+\begin{verbatim}
+copyright: Thorsten Jolitz
+copyright-years: 2014+
+version: 1.0
+licence: GPL 3 or later (free software)
+licence-url: http://www.gnu.org/licenses/
+part-of-emacs: no
+git-repo: https://github.com/tj64/org-watchdoc.git
+git-clone: git://github.com/tj64/org-watchdoc.git
+author: Thorsten Jolitz
+author_email: tjolitz AT gmail DOT com
+\end{verbatim}
+\subsection{Commentary}
+\label{sec-1-2}
+
+This library implements functionality for keeping exported files
+associated with Org subtrees up-to-date.
+
+Its principal use case is writing the comment-section of Emacs
+Lisp (or other) source-code files only once (and in full Org-mode
+using outorg.el), export it as README documentation from the
+\textbf{outorg-edit-buffer} to html, ascii, latex/pdf,
+markdown-github-flavor or whatever, and keep the exported doc
+files automatically up-to-date when the original comment-section
+of the source-buffer is edited explicitly with outorg (via M-x
+outorg-edit-comments-and-propagate-changes).
+
+org-watchdoc is just a little toolbox that can be used
+independently from outorg too. All its functions are commands, so
+its functionality is available for interactive use too.
+\subsection{Installation}
+\label{sec-1-3}
+
+Put this line in your init file
+
+\begin{verbatim}
+(require 'org-watchdoc)
+\end{verbatim}
+
+and make sure Emacs can find the file org-watchdoc.el.
+
+To take real advantage of org-watchdoc, outshine.el and outorg.el
+(and maybe navi-mode.el) should be installed and source-code
+buffers should be structured with outshine headers (outcommented
+Org-mode headers), taking care that the whole comment-section is
+one single outline tree that is the first headline in the
+source-code file. Use org-watchdoc.el itself as an example for
+this kind of file structuring.
+\subsection{Usage}
+\label{sec-1-4}
+
+\subsubsection{Commands}
+\label{sec-1-4-1}
+
+Since org-watchdoc is a toolbox and not a mode, no menu or keymap
+is specified. However, its commands can be used interactively:
+
+\begin{center}
+\begin{tabular}{ll}
+M-x org-watchdoc- & action\\
+\hline
+add-target & add target-combination to watchlist\\
+remove-target & remove target-combination from watchlist\\
+propagate-changes & if md5 changed reexport all combinations\\
+set-md5 & set org-watchdoc-md5 to current md5\\
+\end{tabular}
+\end{center}
+\subsubsection{Interactive Use}
+\label{sec-1-4-2}
+
+In interactive use, this would be the typical order of actions:
+
+\begin{enumerate}
+\item Export first buffer tree to desired doc files
+(e.g. README-GH.md or README-WORG.html)
+
+\item Add targets with point on first buffer headline.
+
+Targets are combinations of files the exporter writes to,
+export-template files to be inserted before the exporter does
+its work, and backends the exporter should export to, e.g.
+\end{enumerate}
+
+\begin{verbatim}
+"/home/me/proj/README-GH.md /home/me/proj/gh-tmpl.org gfm"
+"/home/me/proj/README-WORG.html /home/me/proj/worg-tmpl.org html"
+\end{verbatim}
+
+The three elements of such a combination are prompted from
+the user.
+
+\begin{enumerate}
+\item Save and set md5 variable.
+
+\item Edit the (narrowed) first buffer tree and save
+
+\item Propagate changes.
+
+Since md5 has changed due to the edits, all registered target
+combinations are automatically re-exported.
+\end{enumerate}
+\subsubsection{Use with Outorg}
+\label{sec-1-4-3}
+
+Assuming outshine and outorg are installed and active, do once:
+
+\begin{itemize}
+\item Edit as Org
+
+In the \textbf{outorg-edit-buffer} do steps 1 and 2 described above
+for direct interactive use.
+\end{itemize}
+
+Then whenever you want to edit the source-buffer's
+comment-section and propagate the changes to the watched doc
+files, do:
+
+\begin{verbatim}
+M-x outorg-edit-comments-and-propagate-changes
+\end{verbatim}
+
+instead of the usual 
+
+\begin{verbatim}
+M-x outorg-edit-comment-as-org
+\end{verbatim}
+
+This will
+
+\begin{itemize}
+\item Offer the first buffer tree for editing in the
+\textbf{outorg-edit-buffer}
+
+\item Reset `org-watchdoc-md5' immediately after edit-buffer setup
+
+\item Check if buffer md5 has changed when editing is quitted. If so,
+propagate the changes to the doc files registered in the subtrees
+watchlist.
+\end{itemize}
+\subsubsection{ChangeLog}
+\label{sec-1-4-4}
+
+\begin{center}
+\begin{tabular}{llr}
+date & author(s) & version\\
+\hline
+\textit{<2014-04-09 Mi>} & Thorsten Jolitz & 0.9\\
+\end{tabular}
+\end{center}
+Emacs 24.3.1 (Org mode 8.2.5h)
+\end{document}

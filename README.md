@@ -16,6 +16,12 @@
     wdoc_1992rwM: /home/tj/git/org-watchdoc/README.md /home/tj/git/org-watchdoc/export-templates/org-watchdoc-gh.org gfm
     
     wdoc_1992G_r: /home/tj/gitclone/worg/org-contrib/org-watchdoc.org /home/tj/git/org-watchdoc/export-templates/org-watchdoc-worg.org org
+    
+    wdoc_1992gas: /home/tj/git/org-watchdoc/targets/org-watchdoc.html /home/tj/git/org-watchdoc/export-templates/org-watchdoc-gh.org html
+    
+    wdoc_1992tky: /home/tj/git/org-watchdoc/targets/org-watchdoc.txt /home/tj/git/org-watchdoc/export-templates/org-watchdoc-gh.org ascii
+    
+    wdoc_1992fuB: /home/tj/git/org-watchdoc/targets/org-watchdoc.tex /home/tj/git/org-watchdoc/export-templates/org-watchdoc-gh.org latex
 
 Copyright (C) from 2014 Thorsten Jolitz
 Author: Thorsten Jolitz <tjolitz at gmail dot com>

@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Org-watchdoc</title>
+<!-- 2014-04-10 Do 00:58 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Thorsten Jolitz" />
+<meta  name="description" content="Watchdog for exported Org-mode trees"
+ />
+<meta  name="keywords" content="org-mode, outshine, outorg, exporter, synchronization" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Org-watchdoc</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. org-watchdoc.el &#x2014; Watchdog for exported Org-mode trees</a>
+<ul>
+<li><a href="#sec-1-1">1.1. MetaData</a></li>
+<li><a href="#sec-1-2">1.2. Commentary</a></li>
+<li><a href="#sec-1-3">1.3. Installation</a></li>
+<li><a href="#sec-1-4">1.4. Usage</a>
+<ul>
+<li><a href="#sec-1-4-1">1.4.1. Commands</a></li>
+<li><a href="#sec-1-4-2">1.4.2. Interactive Use</a></li>
+<li><a href="#sec-1-4-3">1.4.3. Use with Outorg</a></li>
+<li><a href="#sec-1-4-4">1.4.4. ChangeLog</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> org-watchdoc.el &#x2014; Watchdog for exported Org-mode trees</h2>
+<div class="outline-text-2" id="text-1">
+<pre class="example">
+EXPORT_OPTIONS: prop:nil
+wdoc_1992rwM: /home/tj/git/org-watchdoc/README.md /home/tj/git/org-watchdoc/export-templates/org-watchdoc-gh.org gfm
+wdoc_1992G_r: /home/tj/gitclone/worg/org-contrib/org-watchdoc.org /home/tj/git/org-watchdoc/export-templates/org-watchdoc-worg.org org
+wdoc_1992gas: /home/tj/git/org-watchdoc/targets/org-watchdoc.html /home/tj/git/org-watchdoc/export-templates/org-watchdoc-gh.org html
+wdoc_1992tky: /home/tj/git/org-watchdoc/targets/org-watchdoc.txt /home/tj/git/org-watchdoc/export-templates/org-watchdoc-gh.org ascii
+wdoc_1992fuB: /home/tj/git/org-watchdoc/targets/org-watchdoc.tex /home/tj/git/org-watchdoc/export-templates/org-watchdoc-gh.org latex
+</pre>
+
+<p>
+Copyright (C) from 2014 Thorsten Jolitz
+Author: Thorsten Jolitz &lt;tjolitz at gmail dot com&gt;
+Keywords: org-mode, exporter, propagate changes, documentation
+</p>
+</div>
+
+<div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> MetaData</h3>
+<div class="outline-text-3" id="text-1-1">
+<pre class="example">
+copyright: Thorsten Jolitz
+copyright-years: 2014+
+version: 1.0
+licence: GPL 3 or later (free software)
+licence-url: http://www.gnu.org/licenses/
+part-of-emacs: no
+git-repo: https://github.com/tj64/org-watchdoc.git
+git-clone: git://github.com/tj64/org-watchdoc.git
+author: Thorsten Jolitz
+author_email: tjolitz AT gmail DOT com
+</pre>
+</div>
+</div>
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> Commentary</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+This library implements functionality for keeping exported files
+associated with Org subtrees up-to-date.
+</p>
+
+<p>
+Its principal use case is writing the comment-section of Emacs
+Lisp (or other) source-code files only once (and in full Org-mode
+using outorg.el), export it as README documentation from the
+<b>outorg-edit-buffer</b> to html, ascii, latex/pdf,
+markdown-github-flavor or whatever, and keep the exported doc
+files automatically up-to-date when the original comment-section
+of the source-buffer is edited explicitly with outorg (via M-x
+outorg-edit-comments-and-propagate-changes).
+</p>
+
+<p>
+org-watchdoc is just a little toolbox that can be used
+independently from outorg too. All its functions are commands, so
+its functionality is available for interactive use too.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> Installation</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+Put this line in your init file
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-'emacs-lisp">(require 'org-watchdoc)
+</pre>
+</div>
+
+<p>
+and make sure Emacs can find the file org-watchdoc.el.
+</p>
+
+<p>
+To take real advantage of org-watchdoc, outshine.el and outorg.el
+(and maybe navi-mode.el) should be installed and source-code
+buffers should be structured with outshine headers (outcommented
+Org-mode headers), taking care that the whole comment-section is
+one single outline tree that is the first headline in the
+source-code file. Use org-watchdoc.el itself as an example for
+this kind of file structuring.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-1-4" class="outline-3">
+<h3 id="sec-1-4"><span class="section-number-3">1.4</span> Usage</h3>
+<div class="outline-text-3" id="text-1-4">
+</div><div id="outline-container-sec-1-4-1" class="outline-4">
+<h4 id="sec-1-4-1"><span class="section-number-4">1.4.1</span> Commands</h4>
+<div class="outline-text-4" id="text-1-4-1">
+<p>
+Since org-watchdoc is a toolbox and not a mode, no menu or keymap
+is specified. However, its commands can be used interactively:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">M-x org-watchdoc-</th>
+<th scope="col" class="left">action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">add-target</td>
+<td class="left">add target-combination to watchlist</td>
+</tr>
+
+<tr>
+<td class="left">remove-target</td>
+<td class="left">remove target-combination from watchlist</td>
+</tr>
+
+<tr>
+<td class="left">propagate-changes</td>
+<td class="left">if md5 changed reexport all combinations</td>
+</tr>
+
+<tr>
+<td class="left">set-md5</td>
+<td class="left">set org-watchdoc-md5 to current md5</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-1-4-2" class="outline-4">
+<h4 id="sec-1-4-2"><span class="section-number-4">1.4.2</span> Interactive Use</h4>
+<div class="outline-text-4" id="text-1-4-2">
+<p>
+In interactive use, this would be the typical order of actions:
+</p>
+
+<ol class="org-ol">
+<li>Export first buffer tree to desired doc files
+(e.g. README-GH.md or README-WORG.html)
+</li>
+
+<li>Add targets with point on first buffer headline.
+
+<p>
+Targets are combinations of files the exporter writes to,
+export-template files to be inserted before the exporter does
+its work, and backends the exporter should export to, e.g.
+</p>
+</li>
+</ol>
+
+<pre class="example">
+"/home/me/proj/README-GH.md /home/me/proj/gh-tmpl.org gfm"
+"/home/me/proj/README-WORG.html /home/me/proj/worg-tmpl.org html"
+</pre>
+
+<p>
+The three elements of such a combination are prompted from
+the user.
+</p>
+
+<ol class="org-ol">
+<li>Save and set md5 variable.
+</li>
+
+<li>Edit the (narrowed) first buffer tree and save
+</li>
+
+<li>Propagate changes.
+
+<p>
+Since md5 has changed due to the edits, all registered target
+combinations are automatically re-exported.
+</p>
+</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-sec-1-4-3" class="outline-4">
+<h4 id="sec-1-4-3"><span class="section-number-4">1.4.3</span> Use with Outorg</h4>
+<div class="outline-text-4" id="text-1-4-3">
+<p>
+Assuming outshine and outorg are installed and active, do once:
+</p>
+
+<ul class="org-ul">
+<li>Edit as Org
+
+<p>
+In the <b>outorg-edit-buffer</b> do steps 1 and 2 described above
+for direct interactive use.
+</p>
+</li>
+</ul>
+
+<p>
+Then whenever you want to edit the source-buffer's
+comment-section and propagate the changes to the watched doc
+files, do:
+</p>
+
+<pre class="example">
+M-x outorg-edit-comments-and-propagate-changes
+</pre>
+
+<p>
+instead of the usual 
+</p>
+
+<pre class="example">
+M-x outorg-edit-comment-as-org
+</pre>
+
+<p>
+This will
+</p>
+
+<ul class="org-ul">
+<li>Offer the first buffer tree for editing in the
+<b>outorg-edit-buffer</b> 
+</li>
+
+<li>Reset `org-watchdoc-md5' immediately after edit-buffer setup 
+</li>
+
+<li>Check if buffer md5 has changed when editing is quitted. If so,
+propagate the changes to the doc files registered in the subtrees
+watchlist.
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-1-4-4" class="outline-4">
+<h4 id="sec-1-4-4"><span class="section-number-4">1.4.4</span> ChangeLog</h4>
+<div class="outline-text-4" id="text-1-4-4">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">date</th>
+<th scope="col" class="left">author(s)</th>
+<th scope="col" class="right">version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left"><span class="timestamp-wrapper"><span class="timestamp">&lt;2014-04-09 Mi&gt;</span></span></td>
+<td class="left">Thorsten Jolitz</td>
+<td class="right">0.9</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2014-04-09 Mi&gt;</span></span></p>
+<p class="author">Author: Thorsten Jolitz</p>
+<p class="email">Email: <a href="mailto:tjolitz at gmail dot com">tjolitz at gmail dot com</a></p>
+<p class="date">Created: 2014-04-10 Do 00:58</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.2.5h)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

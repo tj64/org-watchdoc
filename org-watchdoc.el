@@ -3,6 +3,9 @@
 ;;   :EXPORT_OPTIONS: prop:nil
 ;;   :wdoc_1992rwM: /home/tj/git/org-watchdoc/README.md /home/tj/git/org-watchdoc/export-templates/org-watchdoc-gh.org gfm
 ;;   :wdoc_1992G_r: /home/tj/gitclone/worg/org-contrib/org-watchdoc.org /home/tj/git/org-watchdoc/export-templates/org-watchdoc-worg.org org
+;;   :wdoc_1992gas: /home/tj/git/org-watchdoc/targets/org-watchdoc.html /home/tj/git/org-watchdoc/export-templates/org-watchdoc-gh.org html
+;;   :wdoc_1992tky: /home/tj/git/org-watchdoc/targets/org-watchdoc.txt /home/tj/git/org-watchdoc/export-templates/org-watchdoc-gh.org ascii
+;;   :wdoc_1992fuB: /home/tj/git/org-watchdoc/targets/org-watchdoc.tex /home/tj/git/org-watchdoc/export-templates/org-watchdoc-gh.org latex
 ;;   :END:
 
 ;; Copyright (C) from 2014 Thorsten Jolitz
@@ -208,7 +211,7 @@ EXPORT-BACKEND determines the backend used by `org-export-as' to
 
 (defun org-watchdoc-remove-target (target-file)
   "Remove TARGET-FILE from watch list of root-tree."
-  (interactive "fTarget File: ")
+  (interactive "FTarget File: ")
   (save-excursion
     (save-restriction
       (widen)
@@ -222,7 +225,8 @@ EXPORT-BACKEND determines the backend used by `org-export-as' to
 		    (lambda (--prop)
 		      (when
 			  (org-entry-member-in-multivalued-property
-			   (point) (car-safe --prop) target-file)
+			   (point) (car-safe --prop)
+			   (expand-file-name target-file))
 			(car-safe --prop)))
 		    (org-entry-properties)))))
 	(when (consp prop)
